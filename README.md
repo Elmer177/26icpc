@@ -5,7 +5,6 @@ ICPCのテンプレート共有
 ## Others
 
 - `base_gurukun.cpp`: gurukunのテンプレート。`ll`, `vector` alias, `rep`, `all`, `chmax/chmin`, `yn`, 入出力補助, `inside(x,y,h,w)`
-- `isPrime.cpp`: 試し割りによる素数判定
 - `LazySegmentTree.cpp`: 自作遅延セグ木。区間加算・区間和、区間代入・区間最小値
 
 ## Norms

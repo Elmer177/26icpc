@@ -2,7 +2,7 @@
 using namespace std;
 using ll = long long;
 
-const ll DIJKSTRA_INF = 4e18;
+const ll DIJKSTRA_INF = 4000000000000000000LL;
 
 /*
 Dijkstra

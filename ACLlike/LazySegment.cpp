@@ -177,7 +177,7 @@ struct LazySegmentTree {
 };
 
 /*
-使用例: 区間加算・区間和
+使用例1: 区間加算・区間和
 struct S { long long sum; int len; };
 using F = long long;
 S op(S a, S b) { return {a.sum + b.sum, a.len + b.len}; }
@@ -191,4 +191,96 @@ for (int i = 0; i < n; i++) v[i] = {a[i], 1};
 LazySegmentTree<S, op, e, F, mapping, composition, id> seg(v);
 seg.apply(l, r, x);
 cout << seg.prod(l, r).sum << "\n";
+
+
+使用例2: 区間代入・区間和
+struct S { long long sum; int len; };
+struct F { bool has; long long x; };
+S op(S a, S b) { return {a.sum + b.sum, a.len + b.len}; }
+S e() { return {0, 0}; }
+S mapping(F f, S x) {
+    if (!f.has) return x;
+    return {f.x * x.len, x.len};
+}
+F composition(F f, F g) {
+    if (f.has) return f;
+    return g;
+}
+F id() { return {false, 0}; }
+
+vector<S> v(n);
+for (int i = 0; i < n; i++) v[i] = {a[i], 1};
+LazySegmentTree<S, op, e, F, mapping, composition, id> seg(v);
+seg.apply(l, r, {true, x});
+cout << seg.prod(l, r).sum << "\n";
+
+
+使用例3: 区間加算・区間最大値
+const long long INF = (1LL << 60);
+struct S { long long mx; int len; };
+using F = long long;
+S op(S a, S b) { return {max(a.mx, b.mx), a.len + b.len}; }
+S e() { return {-INF, 0}; }
+S mapping(F f, S x) {
+    if (x.len == 0) return x;
+    return {x.mx + f, x.len};
+}
+F composition(F f, F g) { return f + g; }
+F id() { return 0; }
+
+vector<S> v(n);
+for (int i = 0; i < n; i++) v[i] = {a[i], 1};
+LazySegmentTree<S, op, e, F, mapping, composition, id> seg(v);
+seg.apply(l, r, x);
+cout << seg.prod(l, r).mx << "\n";
+
+
+使用例4: 区間 affine 変換・区間和
+// 各 a[i] を b * a[i] + c に変える。mint は ModInt998244353 など。
+using mint = ModInt998244353;
+struct S { mint sum; int len; };
+struct F { mint b, c; };
+S op(S a, S b) { return {a.sum + b.sum, a.len + b.len}; }
+S e() { return {0, 0}; }
+S mapping(F f, S x) {
+    return {f.b * x.sum + f.c * x.len, x.len};
+}
+F composition(F f, F g) {
+    return {f.b * g.b, f.b * g.c + f.c};
+}
+F id() { return {1, 0}; }
+
+vector<S> v(n);
+for (int i = 0; i < n; i++) v[i] = {a[i], 1};
+LazySegmentTree<S, op, e, F, mapping, composition, id> seg(v);
+seg.apply(l, r, {b, c});
+cout << seg.prod(l, r).sum << "\n";
+
+
+使用例5: 0/1 反転・転倒数
+struct S { long long zero, one, inv; };
+using F = bool;
+S op(S a, S b) {
+    return {
+        a.zero + b.zero,
+        a.one + b.one,
+        a.inv + b.inv + a.one * b.zero
+    };
+}
+S e() { return {0, 0, 0}; }
+S mapping(F f, S x) {
+    if (!f) return x;
+    return {x.one, x.zero, x.zero * x.one - x.inv};
+}
+F composition(F f, F g) { return f ^ g; }
+F id() { return false; }
+
+vector<S> v(n);
+for (int i = 0; i < n; i++) {
+    if (a[i] == 0) v[i] = {1, 0, 0};
+    else v[i] = {0, 1, 0};
+}
+LazySegmentTree<S, op, e, F, mapping, composition, id> seg(v);
+seg.apply(l, r, true);
+cout << seg.prod(l, r).inv << "\n";
 */

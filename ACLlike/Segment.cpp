@@ -118,10 +118,58 @@ struct SegmentTree {
 };
 
 /*
-使用例(RMQ):
+使用例1: 区間最小値(RMQ)・1点更新
 int op(int a, int b) { return min(a, b); }
 int e() { return (int)1e9; }
 
 SegmentTree<int, op, e> seg(a);
+seg.set(i, x);
+cout << seg.prod(l, r) << "\n";  // min(a[l], ..., a[r-1])
+
+
+使用例2: 区間最大値
+int op(int a, int b) { return max(a, b); }
+int e() { return -(int)1e9; }
+
+SegmentTree<int, op, e> seg(a);
+cout << seg.prod(l, r) << "\n";  // max(a[l], ..., a[r-1])
+
+
+使用例3: 区間和・1点更新
+long long op(long long a, long long b) { return a + b; }
+long long e() { return 0; }
+
+SegmentTree<long long, op, e> seg(a);
+seg.set(i, x);
 cout << seg.prod(l, r) << "\n";
+
+
+使用例4: 区間 gcd
+long long op(long long a, long long b) { return gcd(a, b); }
+long long e() { return 0; }
+
+SegmentTree<long long, op, e> seg(a);
+cout << seg.prod(l, r) << "\n";
+
+
+使用例5: 区間最大値とその位置
+using S = pair<int, int>;  // {値, -index}
+S op(S a, S b) { return max(a, b); }
+S e() { return {numeric_limits<int>::min(), numeric_limits<int>::min()}; }
+
+vector<S> v(n);
+for (int i = 0; i < n; i++) v[i] = {a[i], -i};
+SegmentTree<S, op, e> seg(v);
+auto [mx, neg_i] = seg.prod(l, r);
+cout << mx << " " << -neg_i << "\n";  // 最大値と最小 index
+
+
+使用例6: prefix の lower_bound
+// a[i] >= 0 のとき、a[0] + ... + a[r-1] >= x となる最小の r を探す。
+// 存在しなければ n。要素の index がほしいなら r - 1。x > 0 とする。
+long long op(long long a, long long b) { return a + b; }
+long long e() { return 0; }
+
+SegmentTree<long long, op, e> seg(a);
+int r = seg.max_right(0, [&](long long s) { return s < x; });
 */

@@ -20,6 +20,8 @@ STL や構文を忘れたときに見るメモ。
 - `setprecision.cpp`: 小数出力の `fixed << setprecision(...)`
 - `stack.cpp`: `stack` の `push/top/pop`
 - `bit.cpp`: bit の立てる/消す/反転、`popcount`, `ctz`, 部分集合・上位集合列挙
+- `bitset.cpp`: `bitset<N>` の操作、`count`, `any`, `set/reset/flip`, シフト、部分和DP
+- `permutation.cpp`: `next_permutation` / `prev_permutation`、重複あり順列、組合せ列挙
 
 ## ACLlike
 
